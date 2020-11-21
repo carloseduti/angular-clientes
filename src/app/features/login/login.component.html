@@ -1,0 +1,33 @@
+<div class="login-panel">
+  <div class="p-grid p-nogutter p-justify-center p-align-center" style="height:100%">
+    <div class="p-xl-3 p-lg-6 p-md-8 p-sm-10">
+      <p-panel header="Seja Bem Vindo">
+        <div class="p-grid p-justify-center p-align-center">
+          <div class="p-xl-6 p-lg-6 p-md-8 p-sm-10">
+            <img src="assets/images/logo-large.jpg" class="login-logo">
+          </div>
+          <div class="p-col-12">
+            <div class="ui-inputgroup">
+              <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+              <input id="input-username" type="text" size="30" pInputText [(ngModel)]="login"
+                placeholder="Digite o login">
+            </div>
+          </div>
+          <div class="p-col-12">
+            <div class="ui-inputgroup">
+              <span class="ui-inputgroup-addon"><i class="fa fa-key"></i></span>
+              <input id="input-password" type="password" size="30" pInputText [(ngModel)]="senha"
+                placeholder="Digite sua senha">
+            </div>
+          </div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col-12">
+            <button pButton type="button" label="{{ 'Login' | translate}}" class="ui-button-raised"
+              (click)="efetuarLogin()"></button>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+  </div>
+</div>
