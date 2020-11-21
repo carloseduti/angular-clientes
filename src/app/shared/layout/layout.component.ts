@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuDataService } from 'src/app/core/services/menu-data.service';
+import { ApplicationStateService } from 'src/app/core/services/application-state.service';
 
 @Component({
   selector: 'app-layout',
@@ -10,7 +11,8 @@ export class LayoutComponent implements OnInit {
 
   isMenuVisible: boolean;
 
-  constructor(private menuDataService: MenuDataService) {
+  constructor(private menuDataService: MenuDataService,
+    private applicationStateService: ApplicationStateService) {
   }
 
   ngOnInit() {
@@ -20,6 +22,12 @@ export class LayoutComponent implements OnInit {
         that.isMenuVisible = !that.isMenuVisible;
       }
     });
+
+    if (this.applicationStateService.getIsMobileResolution()) {
+      this.isMenuVisible = false;
+    } else {
+      this.isMenuVisible = true;
+    }
   }
 
   ngOnDestroy() {
