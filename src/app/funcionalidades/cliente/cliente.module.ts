@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppCommonModule } from 'src/app/app.common.module';
-import { ClienteRoutingModule } from 'src/app/features/cliente/cliente.routing';
-import { ClienteComponent } from 'src/app/features/cliente/cliente.component';
+import { ClienteRoutingModule } from 'src/app/funcionalidades/cliente/cliente.routing';
+import { ClienteComponent } from 'src/app/funcionalidades/cliente/cliente.component';
 
 @NgModule({
   imports: [

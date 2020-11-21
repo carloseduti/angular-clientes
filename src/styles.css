@@ -80,7 +80,7 @@ html, body {
 
 .ng-header, .ng-footer {
     height: 50px;
-    background-image: -webkit-gradient(linear, left top, right top, from(var(--header-footer-bg-color)), to(var(--header-footer-bg-color2)));
+    background-image: linear-gradient(to right, rgba(89, 149, 146, 0.959) , rgb(1, 48, 49));
     color: var(--header-footer-color);
 }
 
@@ -158,7 +158,7 @@ html, body {
 
 .login-panel, .user-regisration {
     height: 100%;
-    background-image: radial-gradient(var(--header-footer-bg-color) 40%, var(--header-footer-bg-color2));
+    background-image: linear-gradient(to right, rgb(54, 82, 82) , rgba(19, 202, 202, 0.644));
 }
 
 .badge {

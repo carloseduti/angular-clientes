@@ -27,12 +27,6 @@ export class HeaderComponent implements OnInit {
     private themeService: ThemeService,
     private userContextService: UserContextService,
     private menuDataService: MenuDataService) {
-
-
-    var selectedTheme = this.sessionService.getItem("selected-theme");
-    if (selectedTheme) {
-      this.selectTheme(selectedTheme);
-    }
   }
 
   ngOnInit() {
@@ -52,9 +46,5 @@ export class HeaderComponent implements OnInit {
     this.menuDataService.toggleMenuBar.next(true);
   }
 
-  selectTheme(theme: string) {
-    this.sessionService.setItem("selected-theme", theme);
-    this.themeService.selectTheme(theme);
-  }
 
 }
