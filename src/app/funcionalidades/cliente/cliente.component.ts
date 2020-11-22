@@ -3,11 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import { Validators } from '@angular/forms';
 import 'rxjs/add/operator/map';
+import { SelectItem } from 'primeng/api';
+import { ToastService } from 'src/app/core/services/toast.service';
+import { environment } from 'src/environments/environment';
 
-interface Tipos {
-  nome: string,
-  tipo: string
-}
 
 @Component({
   selector: 'app-cliente',
@@ -18,32 +17,36 @@ interface Tipos {
 
 export class ClienteComponent implements OnInit {
 
-  tipos: Tipos[];
   telefones: String [] = [];
   emails: String [] = [];
   cep: any;
+  url = environment.apiUrl;
+  public clientesList
+  renderUpdate = false;
+
+  public tipos: SelectItem[] = [
+    {label: '', value: ''},
+    {label: 'Residencial', value: 'Residencial'},
+    {label: 'Comercial', value: 'Comercial'},
+    {label: 'Celular', value: 'Celular'},
+  ];
 
   public form: FormGroup;
 
   constructor(
     private http: HttpClient,
-    private formBuilder:FormBuilder) {
-
-    this.tipos = [
-      {nome: '', tipo: ''},
-      {nome: 'Residencial', tipo: 'RES'},
-      {nome: 'Comercial', tipo: 'COM'},
-      {nome: 'Celular', tipo: 'CEL'}
-    ];
-
+    private formBuilder:FormBuilder,
+    private toastService: ToastService) {
   }
 
   ngOnInit() {
     this.setForm();
+    this.popularClientes();
   }
 
   private setForm() {
     const group = {
+      id: [null],
       nome: ['', 
         Validators.compose([
         Validators.required,
@@ -58,6 +61,8 @@ export class ClienteComponent implements OnInit {
       cidade: [null, Validators.required],
       bairro: [null, Validators.required],
       tipoTelefoneSelecionado: [null],
+      telefones: [[]],
+      emails: [[]],
       numero: [null],
       email: [null, Validators.email]
     };
@@ -65,12 +70,26 @@ export class ClienteComponent implements OnInit {
     this.form = this.formBuilder.group(group);
   }
 
+  public editarCliente(cliente){
+    this.renderUpdate = true;
+    const controls = this.form.controls;
+    controls.id.setValue(cliente.id);
+    controls.nome.setValue(cliente.nome);
+    controls.cpf.setValue(cliente.cpf);
+    controls.cep.setValue(cliente.cep);
+    controls.logradouro.setValue(cliente.logradouro);
+    controls.complemento.setValue(cliente.complemento);
+    controls.uf.setValue(cliente.uf);
+    controls.cidade.setValue(cliente.cidade);
+    controls.bairro.setValue(cliente.bairro);
+    this.emails = cliente.emails;
+    this.telefones = cliente.emails;
+  }
   consultaCep(cep){
     cep = cep.replace(/\D/g, '');
     if (cep != "") {
       var validacep = /^[0-9]{8}$/;
       if(validacep.test(cep)) {
-        console.log("cep =>", cep)
         this.http.get(`//viacep.com.br/ws/${cep}/json`).toPromise()
         .then(response => {
           this.populaDadosCep(response);
@@ -80,32 +99,94 @@ export class ClienteComponent implements OnInit {
     }
   }
 
+  atualizarCliente(){
+    const controls = this.form.controls; {
+      controls.telefones.setValue(this.telefones);
+      controls.emails.setValue(this.emails)
+    }
+    this.http.put(this.url + "/cliente", this.form.getRawValue()).subscribe(
+      res => {
+        this.toastService.addSingle('success', '', 'Cliente atualizado com Sucesso.');
+        this.renderUpdate = false;
+        this.popularClientes();
+      }, erro =>{
+        this.toastService.addSingle('error', '', 'Erro ao atualizar.');
+      }
+    )
+  }
   populaDadosCep(dados){
-    console.log(dados)
     const controls = this.form.controls;
     controls.logradouro.setValue(dados.logradouro);
     controls.uf.setValue(dados.uf);
     controls.cidade.setValue(dados.localidade);
     controls.bairro.setValue(dados.bairro);
-    console.log(this.form.getRawValue())
   }
 
   adicionarEmail(){
-    this.emails.push(this.form.get("email").value)
+    if (this.form.controls.email.valid) {
+      const email: any = {
+        email: this.form.get("email").value
+      };
+      this.emails.push(email)
+      this.form.get("email").reset();
+    } else {
+      this.toastService.addSingle('error', '', 'Email inválido.');
+    }
+   
   }
 
-  editEmail(email){
-
+  deleteEmail(i){
+    this.emails.splice(i,1)
   }
 
-  deleteEmail(email){
-
-  }
-  adicionarTelefone(){
-    console.log(this.form.get("email").value())
+  deleteTelefone(i){
+   this.telefones.splice(i,1)
   }
 
-  salvar(){
-    console.log(this.form.getRawValue())
+  adicionarTelefone() {
+    const telefone: any = {
+      tipo: this.form.get("tipoTelefoneSelecionado").value,
+      telefone: this.form.get("numero").value
+    };
+    this.telefones.push(telefone)
+    const controls = this.form.controls; {
+      controls.tipoTelefoneSelecionado.setValue(null);
+      controls.numero.setValue(null);
+    }
+  }
+
+  salvar() {
+    const controls = this.form.controls; {
+      controls.telefones.setValue(this.telefones);
+      controls.emails.setValue(this.emails)
+    }
+    this.http.post<any>(this.url + "/cliente", this.form.getRawValue()).subscribe(
+      res => {
+        this.ngOnInit();
+        this.telefones = [];
+        this.emails = [];
+        this.toastService.addSingle('success', '', 'Cliente Adicionado com Sucesso.');
+        this.popularClientes();
+      }
+    )
+  }
+
+  deleteCliente(cliente){
+    const id = cliente.id;
+    this.http.delete(this.url+`/cliente/${id}`).subscribe(
+      res => {
+        this.toastService.addSingle('success', '', 'Cliente excluído com Sucesso.');
+        this.popularClientes();
+      }, erro =>{
+        this.toastService.addSingle('error', '', 'Erro ao excluir.');
+      })
+  };
+
+  popularClientes() {
+    this.http.get(this.url + "/clientes").subscribe(
+      res => {
+        this.clientesList = res;
+      }
+    )
   }
 }

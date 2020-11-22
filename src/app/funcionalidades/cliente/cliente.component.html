@@ -47,37 +47,34 @@
         <div class="p-col-12 p-grid">
             <div class="p-col-1">
                 <label style="font-weight: bold;" for="tipo">Tipo</label>
-                <p-dropdown [options]="tipos"  optionLabel="nome" optionValue="tipo" formControlName="tipoTelefoneSelecionado"></p-dropdown>
+                <p-dropdown [options]="tipos" formControlName="tipoTelefoneSelecionado"></p-dropdown>
             </div>
             <div class="p-col-1">
                 <label style="font-weight: bold;" for="cidade">Número</label>
-                <p-inputMask formControlName="numero" mask="(99) 99999-9999"></p-inputMask>
+                <p-inputMask *ngIf="form.controls.tipoTelefoneSelecionado?.value == 'Celular'" formControlName="numero" mask="(99) 99999-9999"></p-inputMask>
+                <p-inputMask *ngIf="form.controls.tipoTelefoneSelecionado?.value !== 'Celular'" formControlName="numero" mask="(99) 9999-9999"></p-inputMask>
             </div>
             <div class="p-col-1">
-                <button pButton style="margin-top: 18px;" type="button" icon="fas fa-plus-square" iconPos="left"></button>
+                <button pButton style="margin-top: 18px;" type="button" icon="fas fa-plus-square" iconPos="left" (click)="adicionarTelefone()"></button>
             </div>
         </div>
         <div class="p-col-12 p-grid">
-            <div class="p-col-12">
+            <div class="p-col-4">
                 <p-table [paginator]="true" [rows]="5" [value]="telefones">
                     <ng-template pTemplate="header">
                         <tr>
                             <th style="width: 150px;">Tipo</th>
                             <th>Número</th>
-                            <th style="width: 100px; text-align: center;">Opções</th>
+                            <th style="width: 100px; text-align: center;">Remover</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-telefone>
+                    <ng-template pTemplate="body" let-telefone let-i="rowIndex">
                         <tr>
-                            <td>{{carro.nome}}</td>
-                            <td>{{carro.marca}}</td>
-                            <td>{{carro.cor}}</td>
+                            <td>{{telefone.tipo}}</td>
+                            <td>{{telefone.telefone}}</td>
                             <td style="text-align: center;">
-                                <p-button icon="pi pi-user-edit" styleClass="ui-button-warning ui-button-rounded"
-                                    (onClick)="editTelefone(carro)">
-                                </p-button>
                                 <p-button icon="pi pi-trash" styleClass="ui-button-danger ui-button-rounded"
-                                    (onClick)="deleteTelefone(carro)">
+                                    (onClick)="deleteTelefone(i)">
                                 </p-button>
                             </td>
                         </tr>
@@ -87,7 +84,7 @@
         </div>
         <h3>Emails</h3>
         <div class="p-col-12 p-grid">
-            <div class="p-col-5">
+            <div class="p-col-4">
                 <label style="font-weight: bold;" for="email">Email</label>
                 <input formControlName="email" type="text" pInputText>
             </div>
@@ -102,27 +99,22 @@
             </div>
         </div>
         <div class="p-col-12 p-grid">
-            <div class="p-col-12">
+            <div class="p-col-4">
                 <p-table [paginator]="true" [rows]="5" [value]="emails">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Email</th>
-                            <th style="width: 100px; text-align: center;">Opções</th>
+                            <th style="width: 100px; text-align: center;">Remover</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-email>
+                    <ng-template pTemplate="body" let-email let-i="rowIndex">
                         <tr>
-                            <td>{{email}}</td>
+                            <td>{{email.email}}</td>
                             <td style="text-align: center;">
-                                <p-button 
-                                    icon="pi pi-user-edit" 
-                                    styleClass="ui-button-warning ui-button-rounded"
-                                    (onClick)="editEmail(email)">
-                                </p-button>
                                 <p-button 
                                     icon="pi pi-trash" 
                                     styleClass="ui-button-danger ui-button-rounded"
-                                    (onClick)="deleteEmail(email)">
+                                    (onClick)="deleteEmail(i)">
                                 </p-button>
                             </td>
                         </tr>
@@ -132,29 +124,35 @@
         </div>
         <div class="p-col-12 p-grid">
             <div class="p-col-2">
-                <button pButton type="submit" label="Adicionar Cliente" icon="pi pi-check" iconPos="left"></button>
+                <button pButton type="submit" *ngIf="renderUpdate == false" label="Adicionar Cliente" icon="pi pi-check" iconPos="left"></button>
+                <button pButton type="button"*ngIf="renderUpdate == true" label="Atualizar Cliente" icon="pi pi-user-edit" iconPos="left" (click)="atualizarCliente()"></button>
             </div>
         </div>
         <div class="p-col-12 p-grid">
             <div class="p-col-12">
-                <p-table [paginator]="true" [rows]="5" [value]="">
+                <p-table [paginator]="true" [rows]="20" [value]="clientesList">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Nome</th>
                             <th>CPF</th>
+                            <th>Cidade</th>
+                            <th>Bairro</th>
+                            <th>Logradouro</th>
+                            <th>UF</th>
                             <th style="width: 100px; text-align: center;">Opções</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-carro>
+                    <ng-template pTemplate="body" let-cliente>
                         <tr>
-                            <td>{{carro.nome}}</td>
+                            <td>{{cliente.nome}}</td>
+                            <td>{{cliente.cpf}}</td>
+                            <td>{{cliente.cidade}}</td>
+                            <td>{{cliente.bairro}}</td>
+                            <td>{{cliente.logradouro}}</td>
+                            <td>{{cliente.uf}}</td>
                             <td style="text-align: center;">
-                                <p-button icon="pi pi-user-edit" styleClass="ui-button-warning ui-button-rounded"
-                                    (onClick)="editEmail(carro)">
-                                </p-button>
-                                <p-button icon="pi pi-trash" styleClass="ui-button-danger ui-button-rounded"
-                                    (onClick)="deleteEmail(carro)">
-                                </p-button>
+                                <button pButton type="button" icon="pi pi-user-edit" iconPos="left" (click)="editarCliente(cliente)"></button>
+                                <button pButton style="margin-left:5px;" type="button" icon="pi pi-trash" iconPos="left" (click)="deleteCliente(cliente)"></button>
                             </td>
                         </tr>
                     </ng-template>

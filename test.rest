@@ -1,0 +1,13 @@
+{
+    "id": 7,
+    "nome": "Wanderson Rafae",
+    "cpf": "046.807.982-02",
+    "endereco": "rua 23 q 31 lote 12",
+    "contato": {
+        "id": 6,
+        "email": "carloseduardoti@hotmail.com",
+        "telefone": "992606648",
+        "tipo": "Residencial",
+        "cliente": null
+    }
+}
