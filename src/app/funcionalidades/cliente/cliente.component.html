@@ -1,1 +1,165 @@
-<p>ClieasdasdantesClieasdasdantesClieasdasdantes</p>
+<p-panel header="Cadastrar Cliente">
+    <form [formGroup]="form" (submit)="salvar()">
+        <h3>Dados Pessoais</h3>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-6">
+                <label style="font-weight: bold;">Nome</label>
+                <input  formControlName="nome" type="text" pInputText>
+            </div>
+        </div>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-1">
+                <label style="font-weight: bold;">CPF</label>
+                <p-inputMask  formControlName="cpf" mask="999.999.999-99"></p-inputMask>
+            </div>
+        </div>
+        <h3>Endereço</h3>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-1">
+                <label style="font-weight: bold;">CEP</label>
+                <p-inputMask formControlName="cep" mask="99.9999-99" (onBlur)="consultaCep($event.target.value)"></p-inputMask>
+            </div>
+            <div class="p-col-6">
+                <label style="font-weight: bold;">Logradouro</label>
+                <input formControlName="logradouro" type="text" pInputText>
+            </div>
+            <div class="p-col-5">
+                <label style="font-weight: bold;" for="complemento">Complemento</label>
+                <input formControlName="complemento" type="text" pInputText>
+            </div>
+
+        </div>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-1">
+                <label style="font-weight: bold;" for="uf">UF</label>
+                <input formControlName="uf" type="text" pInputText>
+            </div>
+            <div class="p-col-6">
+                <label style="font-weight: bold;" for="cidade">Cidade</label>
+                <input formControlName="cidade" type="text" pInputText>
+            </div>
+            <div class="p-col-5">
+                <label style="font-weight: bold;" for="bairro">Bairro</label>
+                <input formControlName="bairro" type="text" pInputText>
+            </div>
+        </div>
+        <h3>Telefones</h3>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-1">
+                <label style="font-weight: bold;" for="tipo">Tipo</label>
+                <p-dropdown [options]="tipos"  optionLabel="nome" optionValue="tipo" formControlName="tipoTelefoneSelecionado"></p-dropdown>
+            </div>
+            <div class="p-col-1">
+                <label style="font-weight: bold;" for="cidade">Número</label>
+                <p-inputMask formControlName="numero" mask="(99) 99999-9999"></p-inputMask>
+            </div>
+            <div class="p-col-1">
+                <button pButton style="margin-top: 18px;" type="button" icon="fas fa-plus-square" iconPos="left"></button>
+            </div>
+        </div>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-12">
+                <p-table [paginator]="true" [rows]="5" [value]="telefones">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 150px;">Tipo</th>
+                            <th>Número</th>
+                            <th style="width: 100px; text-align: center;">Opções</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-telefone>
+                        <tr>
+                            <td>{{carro.nome}}</td>
+                            <td>{{carro.marca}}</td>
+                            <td>{{carro.cor}}</td>
+                            <td style="text-align: center;">
+                                <p-button icon="pi pi-user-edit" styleClass="ui-button-warning ui-button-rounded"
+                                    (onClick)="editTelefone(carro)">
+                                </p-button>
+                                <p-button icon="pi pi-trash" styleClass="ui-button-danger ui-button-rounded"
+                                    (onClick)="deleteTelefone(carro)">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <h3>Emails</h3>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-5">
+                <label style="font-weight: bold;" for="email">Email</label>
+                <input formControlName="email" type="text" pInputText>
+            </div>
+            <div class="p-col-1">
+                <button pButton 
+                    style="margin-top: 18px;" 
+                    type="button" 
+                    icon="fas fa-plus-square" 
+                    iconPos="left"  
+                    (click)="adicionarEmail()">
+                </button>
+            </div>
+        </div>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-12">
+                <p-table [paginator]="true" [rows]="5" [value]="emails">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Email</th>
+                            <th style="width: 100px; text-align: center;">Opções</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-email>
+                        <tr>
+                            <td>{{email}}</td>
+                            <td style="text-align: center;">
+                                <p-button 
+                                    icon="pi pi-user-edit" 
+                                    styleClass="ui-button-warning ui-button-rounded"
+                                    (onClick)="editEmail(email)">
+                                </p-button>
+                                <p-button 
+                                    icon="pi pi-trash" 
+                                    styleClass="ui-button-danger ui-button-rounded"
+                                    (onClick)="deleteEmail(email)">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-2">
+                <button pButton type="submit" label="Adicionar Cliente" icon="pi pi-check" iconPos="left"></button>
+            </div>
+        </div>
+        <div class="p-col-12 p-grid">
+            <div class="p-col-12">
+                <p-table [paginator]="true" [rows]="5" [value]="">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th style="width: 100px; text-align: center;">Opções</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-carro>
+                        <tr>
+                            <td>{{carro.nome}}</td>
+                            <td style="text-align: center;">
+                                <p-button icon="pi pi-user-edit" styleClass="ui-button-warning ui-button-rounded"
+                                    (onClick)="editEmail(carro)">
+                                </p-button>
+                                <p-button icon="pi pi-trash" styleClass="ui-button-danger ui-button-rounded"
+                                    (onClick)="deleteEmail(carro)">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </form>
+</p-panel>

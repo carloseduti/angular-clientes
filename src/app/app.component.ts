@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoaderService } from 'src/app/core/services/loader.service';
 import { ThemeService } from 'src/app/core/services/theme.service';
-import { SessionService } from 'src/app/core/services/session.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',

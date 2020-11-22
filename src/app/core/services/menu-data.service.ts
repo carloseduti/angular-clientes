@@ -15,7 +15,7 @@ export class MenuDataService {
     getMenuList(): CustomMenuItem[] {
         return [
             {
-                Label: 'Cliente', Icon: 'fas fa-user-friends', RouterLink: '/main/dashboard', Childs: null, IsChildVisible: false
+                Label: 'Clientes', Icon: 'fas fa-user-friends', RouterLink: '/main/dashboard', Childs: null, IsChildVisible: false
             }
         ];
     }

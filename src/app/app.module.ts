@@ -2,10 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-// Prime NG
 import { MessageService } from 'primeng/api';
-// app related
 import { AppComponent } from 'src/app/app.component';
 import { AuthGuard } from 'src/app/core/gaurds/auth.gaurd';
 import { AppRoutingModule } from 'src/app/app.routing.module';
