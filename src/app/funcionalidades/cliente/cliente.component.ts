@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import { SelectItem } from 'primeng/api';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { environment } from 'src/environments/environment';
+import { isNullOrUndefined } from 'util';
 
 
 @Component({
@@ -123,7 +124,10 @@ export class ClienteComponent implements OnInit {
   }
 
   adicionarEmail(){
-    if (this.form.controls.email.valid) {
+    let email = this.form.get("email").value;
+    if (email == null || email ==''){
+      this.toastService.addSingle('error', '', 'Email não pode ser vazio.');
+    } else if (this.form.controls.email.valid) {
       const email: any = {
         email: this.form.get("email").value
       };
@@ -144,14 +148,24 @@ export class ClienteComponent implements OnInit {
   }
 
   adicionarTelefone() {
-    const telefone: any = {
-      tipo: this.form.get("tipoTelefoneSelecionado").value,
-      telefone: this.form.get("numero").value
-    };
-    this.telefones.push(telefone)
-    const controls = this.form.controls; {
-      controls.tipoTelefoneSelecionado.setValue(null);
-      controls.numero.setValue(null);
+    let tipo = this.form.get("tipoTelefoneSelecionado").value;
+    let numero = this.form.get("numero").value
+    console.log(tipo);
+    console.log(numero);
+    if (tipo == null || tipo == '') {
+      this.toastService.addSingle('error', '', 'É necessário selecionar um tipo.');
+    } else if (numero == null || numero == '') {
+      this.toastService.addSingle('error', '', 'É necessário inserir um número.');
+    } else {
+      const telefone: any = {
+        tipo: this.form.get("tipoTelefoneSelecionado").value,
+        telefone: this.form.get("numero").value
+      };
+      this.telefones.push(telefone)
+      const controls = this.form.controls; {
+        controls.tipoTelefoneSelecionado.setValue(null);
+        controls.numero.setValue(null);
+      }
     }
   }
 
