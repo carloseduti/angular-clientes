@@ -55,7 +55,7 @@
                 <p-inputMask *ngIf="form.controls.tipoTelefoneSelecionado?.value !== 'Celular'" formControlName="numero" mask="(99) 9999-9999"></p-inputMask>
             </div>
             <div class="p-col-1">
-                <button pButton style="margin-top: 18px;" type="button" icon="fas fa-plus-square" iconPos="left" (click)="adicionarTelefone()"></button>
+                <button pButton style="margin-top: 18px;" type="button"  class="ui-button-success" icon="fas fa-plus-square" iconPos="left" (click)="adicionarTelefone()"></button>
             </div>
         </div>
         <div class="p-col-12 p-grid">
@@ -73,7 +73,7 @@
                             <td>{{telefone.tipo}}</td>
                             <td>{{telefone.telefone}}</td>
                             <td style="text-align: center;">
-                                <p-button icon="pi pi-trash" styleClass="ui-button-danger ui-button-rounded"
+                                <p-button icon="pi pi-trash" styleClass="ui-button-danger"
                                     (onClick)="deleteTelefone(i)">
                                 </p-button>
                             </td>
@@ -92,6 +92,7 @@
                 <button pButton 
                     style="margin-top: 18px;" 
                     type="button" 
+                    class="ui-button-success"
                     icon="fas fa-plus-square" 
                     iconPos="left"  
                     (click)="adicionarEmail()">
@@ -113,7 +114,7 @@
                             <td style="text-align: center;">
                                 <p-button 
                                     icon="pi pi-trash" 
-                                    styleClass="ui-button-danger ui-button-rounded"
+                                    styleClass="ui-button-danger"
                                     (onClick)="deleteEmail(i)">
                                 </p-button>
                             </td>
@@ -124,8 +125,8 @@
         </div>
         <div class="p-col-12 p-grid">
             <div class="p-col-2">
-                <button pButton type="submit" *ngIf="renderUpdate == false" label="Adicionar Cliente" icon="pi pi-check" iconPos="left"></button>
-                <button pButton type="button"*ngIf="renderUpdate == true" label="Atualizar Cliente" icon="pi pi-user-edit" iconPos="left" (click)="atualizarCliente()"></button>
+                <button pButton type="submit" *ngIf="renderUpdate == false" label="Adicionar Cliente" class="ui-button-success" icon="pi pi-check" iconPos="left"></button>
+                <button pButton type="button"*ngIf="renderUpdate == true" label="Atualizar Cliente" class="ui-button-warning" icon="pi pi-user-edit" iconPos="left" (click)="atualizarCliente()"></button>
             </div>
         </div>
         <div class="p-col-12 p-grid">
@@ -151,8 +152,8 @@
                             <td>{{cliente.logradouro}}</td>
                             <td>{{cliente.uf}}</td>
                             <td style="text-align: center;">
-                                <button pButton type="button" icon="pi pi-user-edit" iconPos="left" (click)="editarCliente(cliente)"></button>
-                                <button pButton style="margin-left:5px;" type="button" icon="pi pi-trash" iconPos="left" (click)="deleteCliente(cliente)"></button>
+                                <button pButton type="button" class="ui-button-warning" icon="pi pi-user-edit" iconPos="left" (click)="editarCliente(cliente)"></button>
+                                <button pButton style="margin-left:5px;" class="ui-button-danger" type="button" icon="pi pi-trash" iconPos="left" (click)="deleteCliente(cliente)"></button>
                             </td>
                         </tr>
                     </ng-template>

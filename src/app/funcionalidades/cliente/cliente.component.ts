@@ -6,7 +6,6 @@ import 'rxjs/add/operator/map';
 import { SelectItem } from 'primeng/api';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { environment } from 'src/environments/environment';
-import { isNullOrUndefined } from 'util';
 
 
 @Component({
@@ -70,7 +69,35 @@ export class ClienteComponent implements OnInit {
 
     this.form = this.formBuilder.group(group);
   }
-
+  validForm(){
+    let valid : Boolean = true;
+    if(this.form.get("nome").value == null || this.form.get("nome").value == ''){
+      valid = false;
+      this.toastService.addSingle('error', '', 'É necessário inserir um nome.');
+    } else if(this.form.get("cpf").value == null || this.form.get("cpf").value == ''){
+      valid = false;
+      this.toastService.addSingle('error', '', 'É necessário inserir um CPF.');
+    }else if(this.form.get("cep").value == null || this.form.get("cep").value == ''){
+      valid = false;
+      this.toastService.addSingle('error', '', 'É necessário inserir um Cep.');
+    }else if(this.form.get("logradouro").value == null || this.form.get("logradouro").value == ''){
+      valid = false;
+      this.toastService.addSingle('error', '', 'É necessário inserir um Logradouro.');
+    }else if(this.form.get("cidade").value == null || this.form.get("cidade").value == ''){
+      valid = false;
+      this.toastService.addSingle('error', '', 'É necessário inserir uma Cidade.');
+    } else if(this.form.get("bairro").value == null || this.form.get("bairro").value == ''){
+      valid = false;
+      this.toastService.addSingle('error', '', 'É necessário inserir um Bairro.');
+    } else if(this.emails == null || this.emails.length == 0){
+      valid = false;
+      this.toastService.addSingle('error', '', 'É necessário inserir pelo menos um Email.');
+    } else if(this.telefones == null || this.telefones.length == 0){
+      valid = false;
+      this.toastService.addSingle('error', '', 'É necessário inserir pelo menos um Telefone.');
+    }
+    return valid;
+  }
   public editarCliente(cliente){
     this.renderUpdate = true;
     const controls = this.form.controls;
@@ -84,7 +111,7 @@ export class ClienteComponent implements OnInit {
     controls.cidade.setValue(cliente.cidade);
     controls.bairro.setValue(cliente.bairro);
     this.emails = cliente.emails;
-    this.telefones = cliente.emails;
+    this.telefones = cliente.telefones;
   }
   consultaCep(cep){
     cep = cep.replace(/\D/g, '');
@@ -110,6 +137,9 @@ export class ClienteComponent implements OnInit {
         this.toastService.addSingle('success', '', 'Cliente atualizado com Sucesso.');
         this.renderUpdate = false;
         this.popularClientes();
+        this.ngOnInit();
+        this.telefones = [];
+        this.emails = [];
       }, erro =>{
         this.toastService.addSingle('error', '', 'Erro ao atualizar.');
       }
@@ -174,15 +204,17 @@ export class ClienteComponent implements OnInit {
       controls.telefones.setValue(this.telefones);
       controls.emails.setValue(this.emails)
     }
-    this.http.post<any>(this.url + "/cliente", this.form.getRawValue()).subscribe(
-      res => {
-        this.ngOnInit();
-        this.telefones = [];
-        this.emails = [];
-        this.toastService.addSingle('success', '', 'Cliente Adicionado com Sucesso.');
-        this.popularClientes();
-      }
-    )
+    if (this.validForm()) {
+      this.http.post<any>(this.url + "/cliente", this.form.getRawValue()).subscribe(
+        res => {
+          this.ngOnInit();
+          this.telefones = [];
+          this.emails = [];
+          this.toastService.addSingle('success', '', 'Cliente Adicionado com Sucesso.');
+          this.popularClientes();
+        }
+      )
+    }
   }
 
   deleteCliente(cliente){

@@ -1,7 +1,7 @@
 {
-  "name": "ng-prime",
+  "name": "desafio-rest-api",
   "version": "1.0.0",
-  "author": "nilav patel",
+  "author": "Carlos Costa",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
