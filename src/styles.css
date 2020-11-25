@@ -158,7 +158,7 @@ html, body {
 
 .login-panel, .user-regisration {
     height: 100%;
-    background-image: linear-gradient(to right, rgb(54, 82, 82) , rgba(19, 202, 202, 0.644));
+    background-image: linear-gradient(to right, rgb(42, 54, 54) , rgba(12, 247, 247, 0.644));
 }
 
 .badge {
